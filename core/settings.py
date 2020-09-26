@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # DEBUG przeniesione do local settinsg
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -65,14 +63,17 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            # tu trzeba będzie dodać kontekst procesor ze stopką i datą
+                # tu trzeba będzie dodać kontekst procesor ze stopką i datą
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")  # ścieżka do folderu z plikami statycznymi
+]
 
+WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -98,6 +99,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# poniższy rekord jest niezbędny kiety zamienia się domyslego usera na usera castomowego
+# w tym przypadku chodzi o zamianę username na adres e-mail w domyślnym User Model
+AUTH_USER_MODEL = 'donations.CustomUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -114,8 +118,21 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_URL = '/login'
+
+# LOGIN_REDIRECT_URL = 'parent-index'
+
+try:
+
+    from core.local_settings import *
+
+except ModuleNotFoundError:
+
+    print("Brak odpowiedniej konfiguracji pliku local_settings.py!")
+    print("Uzupełnij dane i spróbuj ponownie!")
+    exit(0)
