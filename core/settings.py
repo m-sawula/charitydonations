@@ -20,10 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'qem@*r$jqj^k1#xt^0t1cym6(9$26b&-l%$2%-(u*tc#658f02'
+# SECRET_KEY przniesiony do local settinsg
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG przeniesione do local settinsg
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'donations',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -62,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+            # tu trzeba będzie dodać kontekst procesor ze stopką i datą
             ],
         },
     },
@@ -73,17 +77,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'charitydonation',
-        'USER': 'postgres',
-        'PASSWORD': 'coderslab',
-        'HOST': '127.0.0.1',
-        'PORT': '8000',  # port deweloperski
-        # 'PORT': '5432',  # port produkcyjny
-    }
-}
+# DATABASES przeniesiona do local settings
 
 
 # Password validation
