@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 
 
+# ------------authorization------------------
+
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -52,14 +54,50 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.email
 
-#
-# class Category(models.Model):
-#     name = models.CharField(max_length=64, blank=False)
-#
-#     def __str__(self):
-#         return self.name
-#
-#     class Meta:
-#         ordering = ['name']
-#         verbose_name = 'kategoria'
-#         verbose_name_plural = 'kategorie'
+
+# ----------app models------------------
+
+class Category(models.Model):
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'kategoria'
+        verbose_name_plural = 'kategorie'
+
+
+class Institution(models.Model):
+    INST_TYPE = (
+        (1, 'fundacja'),
+        (2, 'organizacja pozarządowa'),
+        (3, 'zbiórka lokalna'),
+    )
+    name = models.CharField(max_length=64)
+    description = models.CharField(max_length=128, blank=False)
+    type = models.IntegerField(choices=INST_TYPE, default=1)
+    categories = models.ManyToManyField(Category)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'instytucja'
+        verbose_name_plural = 'instytucje'
+
+
+class Donation(models.Model):
+    quantity = models.IntegerField(verbose_name='liczba worków')
+    categories = models.ManyToMany(Category)
+    institution = models.ForeignKey(Institution, on_delete=models.CASCADE, related_name='institutions')
+    adress = models.CharField(verbose_name='ulica, nr domu, nr lokalu')
+    phone_number = models.IntegerField(max_length=9, verbose_name='numer telefonu')
+    city = models.CharField(max_length=64)
+    zip_code = models.IntegerField(max_length=6)
+    pick_up_date = models.DateField(null=True)
+    pick_up_time = models.TimeField(null=True)
+    pick_up_comment = models.TextField()
+    user = models.ForeignKey(CustomUser, null=True, default=None)
